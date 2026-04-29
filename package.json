@@ -1,0 +1,13 @@
+{
+  "name": "cohabs-platform",
+  "version": "1.0.0",
+  "description": "",
+  "private": true,
+  "workspaces": [
+    "app",
+    "api"
+  ],
+  "devDependencies": {
+    "prettier": "3.8.3"
+  }
+}
