@@ -1,183 +1,120 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import api from '../api/axios';
+import { THEME_TOKENS, layoutStyles, uiElements } from '../styles/theme';
 
 export default function RegisterPage() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const [formData, setFormData] = useState({
+    email: '',
+    password: '',
+    confirmPassword: '',
+  });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
+
   const navigate = useNavigate();
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (password !== confirmPassword) return setError('Passwords do not match');
+
+    if (formData.password !== formData.confirmPassword) {
+      return setError('Passwords do not match');
+    }
+
+    if (loading) return;
+
     setError('');
     setLoading(true);
+
     try {
-      await api.post('/auth/register', { email, password });
+      await api.post('/auth/register', {
+        email: formData.email,
+        password: formData.password,
+      });
       navigate('/login');
     } catch (err: any) {
-      setError(err.response?.data?.error || 'Registration failed');
+      const msg =
+        err.response?.data?.error ||
+        err.response?.data?.message ||
+        'Registration failed';
+      setError(msg);
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div
-      style={{
-        height: '100vh',
-        width: '100vw',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: '#fff',
-        position: 'fixed',
-        top: 0,
-        left: 0,
-      }}
-    >
-      <div
-        style={{
-          width: '450px',
-          padding: '40px',
-          border: '1px solid #000',
-          backgroundColor: '#fff',
-          textAlign: 'left',
-        }}
-      >
-        <h2
-          style={{
-            fontWeight: 'bold',
-            textTransform: 'uppercase',
-            letterSpacing: '2px',
-            marginBottom: '5px',
-          }}
-        >
-          Register
-        </h2>
-        <p
-          style={{
-            fontSize: '10px',
-            color: '#888',
-            textTransform: 'uppercase',
-            marginBottom: '30px',
-          }}
-        >
-          Join the Platform
-        </p>
+    <div style={layoutStyles.fullPageContainer}>
+      <div style={layoutStyles.authCard}>
+        <h2 style={uiElements.mainTitle}>Register</h2>
+        <p style={uiElements.subtitle}>Join the Platform // v1.0</p>
 
         {error && (
-          <div
-            style={{
-              border: '1px solid #ff4d4d',
-              color: '#ff4d4d',
-              padding: '10px',
-              fontSize: '12px',
-              marginBottom: '20px',
-              fontWeight: 'bold',
-            }}
-          >
-            {error.toUpperCase()}
-          </div>
+          <div style={uiElements.errorMessage}>{error.toUpperCase()}</div>
         )}
 
         <form
           onSubmit={handleSubmit}
           style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}
         >
-          <div style={{ display: 'flex', alignItems: 'center' }}>
-            <label
-              style={{
-                width: '120px',
-                fontSize: '10px',
-                fontWeight: 'bold',
-                textTransform: 'uppercase',
-              }}
-            >
-              Email
-            </label>
+          <div style={uiElements.inputGroup}>
+            <label style={uiElements.label}>Email</label>
             <input
+              name="email"
               type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              value={formData.email}
+              onChange={handleChange}
               required
-              style={{
-                flexGrow: 1,
-                padding: '8px',
-                border: '1px solid #000',
-                borderRadius: 0,
-                outline: 'none',
-              }}
+              style={uiElements.inputField}
+              autoComplete="email"
             />
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center' }}>
-            <label
-              style={{
-                width: '120px',
-                fontSize: '10px',
-                fontWeight: 'bold',
-                textTransform: 'uppercase',
-              }}
-            >
-              Password
-            </label>
+          <div style={uiElements.inputGroup}>
+            <label style={uiElements.label}>Password</label>
             <input
+              name="password"
               type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              value={formData.password}
+              onChange={handleChange}
               required
-              style={{
-                flexGrow: 1,
-                padding: '8px',
-                border: '1px solid #000',
-                borderRadius: 0,
-                outline: 'none',
-              }}
+              style={uiElements.inputField}
+              autoComplete="new-password"
             />
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center' }}>
-            <label
-              style={{
-                width: '120px',
-                fontSize: '10px',
-                fontWeight: 'bold',
-                textTransform: 'uppercase',
-              }}
-            >
-              Confirm
-            </label>
+          <div style={uiElements.inputGroup}>
+            <label style={uiElements.label}>Confirm</label>
             <input
+              name="confirmPassword"
               type="password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
+              value={formData.confirmPassword}
+              onChange={handleChange}
               required
-              style={{
-                flexGrow: 1,
-                padding: '8px',
-                border: '1px solid #000',
-                borderRadius: 0,
-                outline: 'none',
-              }}
+              style={uiElements.inputField}
+              autoComplete="new-password"
             />
           </div>
 
           <button
             type="submit"
             disabled={loading}
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
             style={{
+              ...uiElements.primaryButton,
               marginTop: '20px',
-              backgroundColor: '#000',
-              color: '#fff',
-              padding: '12px',
-              border: 'none',
-              fontWeight: 'bold',
-              textTransform: 'uppercase',
-              cursor: 'pointer',
+              opacity: loading ? 0.7 : 1,
+              backgroundColor: isHovered
+                ? THEME_TOKENS.colors.darkGray
+                : THEME_TOKENS.colors.black,
+              cursor: loading ? 'not-allowed' : 'pointer',
             }}
           >
             {loading ? '...' : 'Create Account'}
@@ -186,17 +123,17 @@ export default function RegisterPage() {
 
         <p
           style={{
-            marginTop: '30px',
+            marginTop: THEME_TOKENS.spacing.md,
             fontSize: '10px',
             textAlign: 'center',
-            color: '#888',
+            color: THEME_TOKENS.colors.gray,
           }}
         >
           HAVE AN ACCOUNT?{' '}
           <Link
             to="/login"
             style={{
-              color: '#000',
+              color: THEME_TOKENS.colors.black,
               fontWeight: 'bold',
               textDecoration: 'underline',
             }}

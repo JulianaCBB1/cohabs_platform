@@ -1,132 +1,86 @@
+import { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import {
+  THEME_TOKENS,
+  layoutStyles,
+  uiElements,
+  dashboardStyles,
+  dashboardElements,
+} from '../styles/theme';
 
 export default function DashboardPage() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
+  const [isLogoutHovered, setIsLogoutHovered] = useState(false);
+
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
+  };
 
   return (
-    <div
-      style={{
-        height: '100vh',
-        width: '100vw',
-        display: 'flex',
-        flexDirection: 'column', // Navbar on top, Content below
-        backgroundColor: '#fff',
-        overflow: 'hidden',
-        position: 'fixed',
-        top: 0,
-        left: 0,
-      }}
-    >
-      {/* 1. TOP NAVBAR */}
-      <nav
-        style={{
-          height: '60px',
-          backgroundColor: '#000',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          padding: '0 20px',
-          flexShrink: 0,
-        }}
-      >
+    <div style={layoutStyles.dashboardContainer}>
+      <nav style={dashboardStyles.navbar}>
         <span
           style={{
-            color: '#fff',
-            fontWeight: 'bold',
-            textTransform: 'uppercase',
+            ...uiElements.mainTitle,
+            fontSize: '18px',
+            color: THEME_TOKENS.colors.white,
           }}
         >
-          Cohabs
+          Platform
         </span>
         <button
-          onClick={() => {
-            logout();
-            navigate('/login');
-          }}
+          onClick={handleLogout}
+          onMouseEnter={() => setIsLogoutHovered(true)}
+          onMouseLeave={() => setIsLogoutHovered(false)}
           style={{
-            color: '#ff4d4d',
-            background: 'none',
-            border: '1px solid #ff4d4d',
-            padding: '4px 12px',
-            cursor: 'pointer',
+            ...uiElements.secondaryButton,
+            padding: '6px 16px',
+            fontSize: '10px',
+            borderColor: THEME_TOKENS.colors.error,
+            backgroundColor: isLogoutHovered
+              ? THEME_TOKENS.colors.error
+              : 'transparent',
+            color: isLogoutHovered
+              ? THEME_TOKENS.colors.white
+              : THEME_TOKENS.colors.error,
           }}
         >
           LOGOUT
         </button>
       </nav>
 
-      {/* 2. BODY - This is where the COLUMNS happen */}
-      <div style={{ display: 'flex', flexGrow: 1, flexDirection: 'row' }}>
-        {/* LEFT COLUMN: User Info */}
-        <aside
-          style={{
-            width: '300px',
-            backgroundColor: '#f8f8f8',
-            padding: '30px',
-            borderRight: '1px solid #ddd',
-            textAlign: 'left', // Ensures text isn't centered
-          }}
-        >
-          <h6
-            style={{
-              fontSize: '10px',
-              color: '#888',
-              textTransform: 'uppercase',
-              marginBottom: '20px',
-            }}
-          >
-            User Profile
-          </h6>
-          <p
-            style={{
-              fontSize: '12px',
-              marginBottom: '4px',
-              fontWeight: 'bold',
-            }}
-          >
-            {user?.email}
-          </p>
-          <span
-            style={{
-              fontSize: '10px',
-              border: '1px solid #000',
-              padding: '2px 6px',
-            }}
-          >
-            {user?.role?.toUpperCase()}
-          </span>
-        </aside>
+      <div style={{ display: 'flex', flexGrow: 1 }}>
+        <aside style={dashboardStyles.sidebar}>
+          <h6 style={dashboardElements.profileHeader}>User Profile</h6>
 
-        {/* RIGHT COLUMN: Workspace */}
-        <main
-          style={{
-            flexGrow: 1,
-            padding: '40px',
-            textAlign: 'left', // Force left alignment
-          }}
-        >
-          <h4
-            style={{
-              fontWeight: 'bold',
-              textTransform: 'uppercase',
-              margin: 0,
-            }}
-          >
-            Workspace
-          </h4>
-          <p style={{ fontSize: '10px', color: '#aaa' }}>
-            Main Content Node Active
-          </p>
           <div
             style={{
-              marginTop: '30px',
-              border: '1px dashed #ccc',
-              padding: '20px',
+              marginBottom: THEME_TOKENS.spacing.lg,
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
             }}
           >
-            Select a module to get started.
+            <p style={dashboardElements.emailDisplay}>
+              {user?.email || 'OFFLINE_USER'}
+            </p>
+            <div style={dashboardStyles.badge}>
+              ROLE: {user?.role?.toUpperCase() || 'GUEST'}
+            </div>
+          </div>
+        </aside>
+
+        <main style={dashboardStyles.dashboard}>
+          <h4 style={uiElements.mainTitle}>Dashboard</h4>
+          <p style={uiElements.subtitle}>Main Content Node Active // v1.0</p>
+
+          <div style={dashboardElements.contentBox}>
+            <p style={dashboardElements.placeholderText}>
+              Select a module from the system interface to begin operation.
+            </p>
           </div>
         </main>
       </div>
