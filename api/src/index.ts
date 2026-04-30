@@ -1,9 +1,8 @@
-import dotenv from 'dotenv';
-import path from 'path';
-dotenv.config({ path: path.join(__dirname, '../.env') });
 import express from 'express';
-import { AppDataSource } from './data-source';
 import cors from 'cors';
+import { AppDataSource } from './data-source';
+import authRouter from './routes/auth';
+import { initializeServices } from './services/instances';
 
 const app = express();
 const port = 3001;
@@ -19,6 +18,10 @@ app.get('/health', (_req, res) => {
 AppDataSource.initialize()
   .then(() => {
     console.log('Database connected');
+
+    initializeServices();
+
+    app.use('/auth', authRouter);
 
     app.listen(port, () => {
       console.log(`Server running on http://localhost:${port}`);
