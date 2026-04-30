@@ -3,6 +3,7 @@ import cors from 'cors';
 import { AppDataSource } from './data-source';
 import authRouter from './routes/auth';
 import { initializeServices } from './services/instances';
+import { globalErrorHandler } from './middleware/errorHandler';
 
 const app = express();
 const port = 3001;
@@ -22,6 +23,7 @@ AppDataSource.initialize()
     initializeServices();
 
     app.use('/auth', authRouter);
+    app.use(globalErrorHandler);
 
     app.listen(port, () => {
       console.log(`Server running on http://localhost:${port}`);
