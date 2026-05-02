@@ -96,7 +96,7 @@ export default function HousesTab() {
       )}
 
       {data?.data.length === 0 && (
-        <p style={uiElements.subTitle}>NO_RECORDS_FOUND</p>
+        <p style={uiElements.subTitle}>NO HOUSES FOUND</p>
       )}
 
       {data?.data.map((h) => (
