@@ -4,11 +4,12 @@ dotenv.config({ path: path.join(__dirname, '../.env') });
 import { DataSource } from 'typeorm';
 import { User } from './entities/User';
 import { House } from './entities/House';
+import { Room } from './entities/Room';
 
 export const AppDataSource = new DataSource({
   type: 'postgres',
   url: process.env.DATABASE_URL as string,
-  entities: [User, House],
+  entities: [User, House, Room],
   migrations: [path.join(__dirname, 'migrations', '*.ts')],
   synchronize: false,
   logging: false,
