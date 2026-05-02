@@ -53,7 +53,6 @@ export default function RegisterPage() {
     <div style={layoutStyles.fullPageContainer}>
       <div style={layoutStyles.authCard}>
         <h2 style={uiElements.mainTitle}>Register</h2>
-        <p style={uiElements.subtitle}>Join the Platform // v1.0</p>
 
         {error && (
           <div style={uiElements.errorMessage}>{error.toUpperCase()}</div>

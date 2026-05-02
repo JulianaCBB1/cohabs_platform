@@ -48,7 +48,6 @@ export default function LoginPage() {
     <div style={layoutStyles.fullPageContainer}>
       <div style={layoutStyles.authCard}>
         <h2 style={uiElements.mainTitle}>Login</h2>
-        <p style={uiElements.subtitle}>Authentication Required</p>
 
         {error && (
           <div style={uiElements.errorMessage}>{error.toUpperCase()}</div>
