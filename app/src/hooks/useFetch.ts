@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import api from '../api/axios';
 
 export function useFetch<T>(url: string) {
@@ -6,28 +6,40 @@ export function useFetch<T>(url: string) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    let cancelled = false;
-    setLoading(true);
-    setError(null);
+  const fetchData = useCallback(
+    async (isCancelled: () => boolean) => {
+      setLoading(true);
+      setError(null);
 
-    async function fetchData() {
       try {
         const res = await api.get<T>(url);
-        if (!cancelled) setData(res.data);
-      } catch (error: any) {
-        if (!cancelled)
-          setError(error.response?.data?.error || 'Error fetching data');
+        if (!isCancelled()) {
+          setData(res.data);
+        }
+      } catch (err: any) {
+        if (!isCancelled()) {
+          setError(err.response?.data?.error || 'Error fetching data');
+        }
       } finally {
-        if (!cancelled) setLoading(false);
+        if (!isCancelled()) {
+          setLoading(false);
+        }
       }
-    }
-    fetchData();
+    },
+    [url]
+  );
+
+  useEffect(() => {
+    let isCancelled = false;
+
+    fetchData(() => isCancelled);
 
     return () => {
-      cancelled = true;
+      isCancelled = true;
     };
   }, [url]);
 
-  return { data, loading, error };
+  const refetch = useCallback(() => fetchData(() => false), [fetchData]);
+
+  return { data, loading, error, refetch };
 }
