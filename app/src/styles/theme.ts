@@ -27,6 +27,33 @@ export const THEME_TOKENS = {
   },
 };
 
+const _secondaryButtonBase: React.CSSProperties = {
+  backgroundColor: 'transparent',
+  color: THEME_TOKENS.colors.black,
+  border: `1px solid ${THEME_TOKENS.colors.black}`,
+  padding: '8px 16px',
+  fontWeight: THEME_TOKENS.typography.weightBold as any,
+  textTransform: 'uppercase',
+  cursor: 'pointer',
+  fontSize: '11px',
+  textAlign: 'center',
+  textDecoration: 'none',
+};
+
+const _subTitleBase: React.CSSProperties = {
+  fontSize: '12px',
+  color: THEME_TOKENS.colors.gray,
+  textTransform: 'uppercase',
+  letterSpacing: THEME_TOKENS.typography.letterSpacing,
+};
+
+const _inputBase: React.CSSProperties = {
+  padding: '8px',
+  border: `1px solid ${THEME_TOKENS.colors.black}`,
+  borderRadius: 0,
+  outline: 'none',
+};
+
 export const layoutStyles: Record<string, React.CSSProperties> = {
   fullPageContainer: {
     height: '100vh',
@@ -41,11 +68,13 @@ export const layoutStyles: Record<string, React.CSSProperties> = {
     overflow: 'hidden',
   },
   authCard: {
-    width: '450px',
-    padding: THEME_TOKENS.spacing.xl,
+    // width: '100%',
+    maxWidth: '550px',
+    padding: '60px',
     border: `1px solid ${THEME_TOKENS.colors.black}`,
     backgroundColor: THEME_TOKENS.colors.white,
     textAlign: 'left',
+    boxSizing: 'border-box' as any,
   },
   dashboardContainer: {
     height: '100vh',
@@ -60,74 +89,78 @@ export const layoutStyles: Record<string, React.CSSProperties> = {
 };
 
 export const uiElements: Record<string, React.CSSProperties> = {
-  descriptionBlock: {
-    borderLeft: `4px solid ${THEME_TOKENS.colors.black}`,
-    paddingLeft: THEME_TOKENS.spacing.sm,
-    marginBottom: THEME_TOKENS.spacing.md,
+  // ── Inputs ──
+  inputGroup: {
+    display: 'flex',
+    alignItems: 'center',
+    width: '100%',
   },
-  descriptionText: {
-    fontSize: '11px',
-    lineHeight: '1.5',
-    margin: 0,
-    fontWeight: THEME_TOKENS.typography.weightBold as any,
+  label: {
+    width: '110px',
+    fontSize: '14px',
+    fontWeight: 'bold',
     textTransform: 'uppercase',
+    color: THEME_TOKENS.colors.gray,
   },
+  input: {
+    ..._inputBase,
+    flexGrow: 1,
+  },
+  // Full-width input used inside forms
+  inputFull: {
+    ..._inputBase,
+    width: '100%',
+    boxSizing: 'border-box' as any,
+    marginBottom: THEME_TOKENS.spacing.xs,
+  },
+  // Bare input (no flex-grow, for use inside flex rows)
+  inputBare: {
+    ..._inputBase,
+    flex: 1,
+  },
+  // Select dropdown — same visual as input
+  select: {
+    ..._inputBase,
+    width: '100%',
+    boxSizing: 'border-box' as any,
+    backgroundColor: THEME_TOKENS.colors.white,
+    cursor: 'pointer',
+  },
+
+  // ── Typography ──
   mainTitle: {
     fontWeight: THEME_TOKENS.typography.weightBlack as any,
     textTransform: 'uppercase',
     letterSpacing: THEME_TOKENS.typography.letterSpacingLarge,
     fontSize: '32px',
-    margin: 0,
+    marginBottom: THEME_TOKENS.spacing.xs,
     lineHeight: '1',
   },
-  subtitle: {
-    fontSize: '10px',
-    color: THEME_TOKENS.colors.gray,
+  navbarBrand: {
+    fontWeight: THEME_TOKENS.typography.weightBlack as any,
     textTransform: 'uppercase',
+    letterSpacing: THEME_TOKENS.typography.letterSpacingLarge,
+    fontSize: '18px',
+    margin: 0,
+    lineHeight: '1',
+    color: THEME_TOKENS.colors.white,
+  },
+  subTitle: {
+    ..._subTitleBase,
     marginTop: '10px',
     marginBottom: THEME_TOKENS.spacing.md,
-    letterSpacing: '1px',
   },
-  inputGroup: {
-    display: 'flex',
-    alignItems: 'center',
-    marginBottom: THEME_TOKENS.spacing.sm,
+  // Subtitle reset — no vertical margin (used as form section headings)
+  subTitleFlush: {
+    ..._subTitleBase,
+    margin: `0 0 ${THEME_TOKENS.spacing.xs}`,
   },
-  label: {
-    width: '110px',
+  // Tiny label above a form field
+  fieldLabel: {
+    ..._subTitleBase,
+    display: 'block',
     fontSize: '10px',
-    fontWeight: THEME_TOKENS.typography.weightBold as any,
-    textTransform: 'uppercase',
-  },
-  inputField: {
-    flexGrow: 1,
-    padding: '8px',
-    border: `1px solid ${THEME_TOKENS.colors.black}`,
-    borderRadius: 0,
-    outline: 'none',
-  },
-  primaryButton: {
-    backgroundColor: THEME_TOKENS.colors.black,
-    color: THEME_TOKENS.colors.white,
-    padding: '16px',
-    border: 'none',
-    fontWeight: THEME_TOKENS.typography.weightBold as any,
-    textTransform: 'uppercase',
-    cursor: 'pointer',
-    letterSpacing: '1px',
-    transition: 'background-color 0.2s ease',
-  },
-  secondaryButton: {
-    backgroundColor: THEME_TOKENS.colors.white,
-    color: THEME_TOKENS.colors.black,
-    padding: '16px',
-    border: `1px solid ${THEME_TOKENS.colors.black}`,
-    fontWeight: THEME_TOKENS.typography.weightBold as any,
-    textTransform: 'uppercase',
-    cursor: 'pointer',
-    textAlign: 'center',
-    textDecoration: 'none',
-    fontSize: '12px',
+    marginBottom: '4px',
   },
   errorMessage: {
     border: `1px solid ${THEME_TOKENS.colors.error}`,
@@ -136,6 +169,107 @@ export const uiElements: Record<string, React.CSSProperties> = {
     fontSize: '12px',
     marginBottom: THEME_TOKENS.spacing.sm,
     fontWeight: 'bold',
+  },
+
+  // ── Buttons ──
+  primaryButton: {
+    backgroundColor: THEME_TOKENS.colors.black,
+    color: THEME_TOKENS.colors.white,
+    border: `2px solid ${THEME_TOKENS.colors.black}`,
+    padding: `${THEME_TOKENS.spacing.xs} ${THEME_TOKENS.spacing.sm}`,
+    fontWeight: THEME_TOKENS.typography.weightBlack as any,
+    textTransform: 'uppercase',
+    cursor: 'pointer',
+    letterSpacing: '1px',
+    fontSize: '12px',
+  },
+  secondaryButton: {
+    ..._secondaryButtonBase,
+  },
+  deleteButton: {
+    ..._secondaryButtonBase,
+    color: THEME_TOKENS.colors.error,
+    borderColor: THEME_TOKENS.colors.error,
+  },
+  // Logout button — base (not hovered)
+  logoutButton: {
+    ..._secondaryButtonBase,
+    padding: '6px 16px',
+    fontSize: '10px',
+    borderColor: THEME_TOKENS.colors.error,
+    backgroundColor: 'transparent',
+    color: THEME_TOKENS.colors.error,
+  },
+  // Logout button — hovered
+  logoutButtonHovered: {
+    ..._secondaryButtonBase,
+    padding: '6px 16px',
+    fontSize: '10px',
+    borderColor: THEME_TOKENS.colors.error,
+    backgroundColor: THEME_TOKENS.colors.error,
+    color: THEME_TOKENS.colors.white,
+  },
+
+  // ── Records list ──
+  nodeContainer: {
+    border: `1px solid ${THEME_TOKENS.colors.black}`,
+    padding: THEME_TOKENS.spacing.sm,
+    marginBottom: THEME_TOKENS.spacing.xs,
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    backgroundColor: THEME_TOKENS.colors.white,
+  },
+  recordPrimary: {
+    fontWeight: 'bold',
+    fontSize: '13px',
+  },
+  recordSecondary: {
+    fontSize: '11px',
+    color: THEME_TOKENS.colors.gray,
+    marginTop: '4px',
+  },
+  recordActions: {
+    display: 'flex',
+    gap: THEME_TOKENS.spacing.xs,
+  },
+
+  // ── Forms ──
+  formContainer: {
+    border: `2px solid ${THEME_TOKENS.colors.black}`,
+    padding: THEME_TOKENS.spacing.sm,
+    marginBottom: THEME_TOKENS.spacing.md,
+    backgroundColor: THEME_TOKENS.colors.lightGray,
+  },
+  formRow: {
+    display: 'flex',
+    gap: THEME_TOKENS.spacing.xs,
+    marginBottom: THEME_TOKENS.spacing.xs,
+  },
+  formRowWrap: {
+    display: 'flex',
+    flexWrap: 'wrap' as any,
+    gap: THEME_TOKENS.spacing.xs,
+    marginBottom: THEME_TOKENS.spacing.xs,
+  },
+  formField: {
+    flex: '1 1 200px' as any,
+  },
+  formFieldNarrow: {
+    flex: '1 1 160px' as any,
+  },
+  formActions: {
+    display: 'flex',
+    gap: THEME_TOKENS.spacing.xs,
+  },
+
+  // ── Pagination ──
+  paginationFooter: {
+    marginTop: THEME_TOKENS.spacing.md,
+    display: 'flex',
+    gap: THEME_TOKENS.spacing.xs,
+    alignItems: 'center',
+    fontWeight: THEME_TOKENS.typography.weightBlack as any,
   },
 };
 
@@ -149,6 +283,11 @@ export const dashboardStyles: Record<string, React.CSSProperties> = {
     padding: `0 ${THEME_TOKENS.spacing.md}`,
     flexShrink: 0,
   },
+  body: {
+    display: 'flex',
+    flexGrow: 1,
+    overflow: 'hidden',
+  },
   sidebar: {
     width: '120px',
     backgroundColor: THEME_TOKENS.colors.white,
@@ -158,10 +297,45 @@ export const dashboardStyles: Record<string, React.CSSProperties> = {
     flexDirection: 'column',
     alignItems: 'center',
   },
+  sidebarProfile: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
+  sidebarNavSection: {
+    borderTop: `1px solid ${THEME_TOKENS.colors.black}`,
+    paddingTop: THEME_TOKENS.spacing.sm,
+    width: '100%',
+  },
+  // Inactive sidebar nav button
+  sidebarNavButton: {
+    ..._secondaryButtonBase,
+    display: 'block',
+    width: '100%',
+    textAlign: 'center',
+    marginBottom: '6px',
+    fontSize: '10px',
+    backgroundColor: 'transparent',
+    color: THEME_TOKENS.colors.black,
+  },
+  // Active sidebar nav button
+  sidebarNavButtonActive: {
+    ..._secondaryButtonBase,
+    display: 'block',
+    width: '100%',
+    textAlign: 'center',
+    marginBottom: '6px',
+    fontSize: '10px',
+    backgroundColor: THEME_TOKENS.colors.black,
+    color: THEME_TOKENS.colors.white,
+  },
   dashboard: {
     flexGrow: 1,
     padding: THEME_TOKENS.spacing.sm,
     textAlign: 'left',
+    flex: 1,
+    backgroundColor: THEME_TOKENS.colors.white,
+    overflow: 'auto',
   },
   badge: {
     fontSize: '9px',
@@ -171,6 +345,15 @@ export const dashboardStyles: Record<string, React.CSSProperties> = {
     backgroundColor: 'transparent',
     color: THEME_TOKENS.colors.black,
     display: 'inline-block',
+  },
+  layout: {
+    display: 'flex',
+    minHeight: '100vh',
+    backgroundColor: THEME_TOKENS.colors.white,
+  },
+  profileSection: {
+    paddingBottom: THEME_TOKENS.spacing.md,
+    borderBottom: `1px solid ${THEME_TOKENS.colors.black}`,
   },
 };
 
@@ -215,11 +398,8 @@ export const dashboardElements: Record<string, React.CSSProperties> = {
     textTransform: 'uppercase',
     fontWeight: THEME_TOKENS.typography.weightBlack as any,
     letterSpacing: '1px',
-    marginBottom: THEME_TOKENS.spacing.sm,
-    textAlign: 'center',
     margin: 0,
     lineHeight: '1',
-    // paddingTop: '12px',
   },
   emailDisplay: {
     fontSize: '10px',
@@ -227,5 +407,12 @@ export const dashboardElements: Record<string, React.CSSProperties> = {
     margin: `0 0 ${THEME_TOKENS.spacing.xs} 0`,
     wordBreak: 'break-all',
     textAlign: 'center',
+  },
+  // Tab section header row (title left, add button right)
+  tabHeader: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: THEME_TOKENS.spacing.md,
   },
 };
