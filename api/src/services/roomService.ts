@@ -1,5 +1,4 @@
 import { Repository } from 'typeorm';
-import { AppDataSource } from '../data-source';
 import { Room } from '../entities/Room';
 import { NotFoundError } from '../utils/errors';
 import { houseService } from './instances';
