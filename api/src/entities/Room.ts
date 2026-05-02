@@ -9,6 +9,7 @@ import {
   JoinColumn,
 } from 'typeorm';
 import { House } from './House';
+import { Lease } from './Lease';
 
 @Entity('rooms')
 export class Room {
@@ -31,6 +32,10 @@ export class Room {
   @ManyToOne(() => House, (house) => house.rooms, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'houseId' })
   house: House;
+
+  @OneToMany(() => Lease, (lease) => lease.room)
+  @JoinColumn({ name: 'leaseId' })
+  leases: Lease[];
 
   @CreateDateColumn()
   createdAt: Date;
