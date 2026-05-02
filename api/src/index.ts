@@ -6,6 +6,8 @@ import { globalErrorHandler } from './middleware/errorHandler';
 import authRouter from './routes/auth';
 import housesRouter from './routes/houses';
 import roomRouter from './routes/rooms';
+import leaseRouter from './routes/leases';
+import userRouter from './routes/users';
 
 const app = express();
 const port = 3001;
@@ -27,6 +29,8 @@ AppDataSource.initialize()
     app.use('/auth', authRouter);
     app.use('/houses', housesRouter);
     app.use('/houses/:houseId/rooms', roomRouter);
+    app.use('/leases', leaseRouter);
+    app.use('/users', userRouter);
 
     app.use(globalErrorHandler);
 

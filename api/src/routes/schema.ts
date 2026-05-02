@@ -42,3 +42,19 @@ export const houseIdParam = z.object({
     houseId: z.uuid('Invalid House ID format'),
   }),
 });
+
+export const leaseBody = z.object({
+  body: z.object({
+    userId: z.string().uuid('Invalid user ID'),
+    roomId: z.string().uuid('Invalid room ID'),
+    startDate: z.string().min(1, 'Start date is required'),
+    endDate: z.string().optional(),
+  }),
+});
+
+export const leaseUpdateBody = z.object({
+  body: z.object({
+    startDate: z.string().min(1, 'Start date is required'),
+    endDate: z.string().optional(),
+  }),
+});
