@@ -4,12 +4,15 @@ import api from '../../api/axios';
 import { uiElements } from '../../styles/theme';
 import TabShell from './TabShell';
 import RecordRow from './RecordRow';
+import type { Room } from './RoomsTab';
 
-interface House {
+export interface House {
   id: string;
   address: string;
   createdAt: string;
+  rooms: Room[];
 }
+
 interface PaginatedHouses {
   data: House[];
   meta: { total: number; page: number; totalPages: number };
