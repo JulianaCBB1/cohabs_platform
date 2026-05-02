@@ -1,18 +1,11 @@
 import { Router, Request, Response, NextFunction } from 'express';
 import { userService } from '../services/instances';
 import { validate } from '../middleware/validate';
-import z from 'zod';
+import { AuthBody } from './schema';
 
 const router = Router();
 
-const AuthSchema = z.object({
-  body: z.object({
-    email: z.email('Invalid email address'),
-    password: z.string().min(6, 'Password must be at least 6 characters'),
-  }),
-});
-
-router.post('/register', validate(AuthSchema), async (req, res, next) => {
+router.post('/register', validate(AuthBody), async (req, res, next) => {
   try {
     const { email, password } = req.body;
     const user = await userService.register(email, password);
@@ -22,7 +15,7 @@ router.post('/register', validate(AuthSchema), async (req, res, next) => {
   }
 });
 
-router.post('/login', validate(AuthSchema), async (req, res, next) => {
+router.post('/login', validate(AuthBody), async (req, res, next) => {
   try {
     const { email, password } = req.body;
     const result = await userService.login(email, password);

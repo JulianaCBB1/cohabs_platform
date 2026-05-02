@@ -2,43 +2,27 @@ import { Router } from 'express';
 import { houseService } from '../services/instances';
 import { authenticate } from '../middleware/auth';
 import { validate } from '../middleware/validate';
-import z from 'zod';
+import { addressBody, idParam, paginationQuery } from './schema';
 
 const router = Router();
 router.use(authenticate as any);
 
-const paginationQuery = z.object({
-  query: z.object({
-    page: z
-      .string()
-      .optional()
-      .transform((val) => Math.max(1, Number(val) || 1)),
-    limit: z
-      .string()
-      .optional()
-      .transform((val) => Math.max(1, Math.min(100, Number(val) || 10))),
-  }),
-});
-
-const idParam = z.object({
-  params: z.object({
-    id: z.uuid('Invalid ID format'),
-  }),
-});
-
-const addressBody = z.object({
-  body: z.object({
-    address: z.string().min(1, 'Address is required'),
-  }),
-});
-
-export const houseSchema = {
+const houseSchema = {
   list: paginationQuery,
   get: idParam,
   create: addressBody,
-  update: idParam.merge(addressBody),
+  update: idParam.extend(addressBody.shape),
   delete: idParam,
 };
+
+router.get('/all', async (_req, res) => {
+  try {
+    const houses = await houseService.getAllUnpaginated();
+    res.json(houses);
+  } catch {
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
 
 router.get('/', validate(houseSchema.list), async (req, res) => {
   try {
