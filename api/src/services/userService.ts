@@ -2,7 +2,7 @@ import bcrypt from 'bcrypt';
 import { Repository } from 'typeorm';
 import { User } from '../entities/User';
 import { signToken } from '../utils/jwt';
-import { ConflictError, ForbiddenError } from '../utils/errors';
+import { ConflictError, ForbiddenError, NotFoundError } from '../utils/errors';
 
 export class UserService {
   constructor(private userRepo: Repository<User>) {}
@@ -30,5 +30,13 @@ export class UserService {
       token,
       user: { id: user.id, email: user.email, role: user.role },
     };
+  }
+
+  async getById(id: string) {
+    const room = await this.userRepo.findOne({
+      where: { id },
+    });
+    if (!room) throw new NotFoundError(`User ${id} not found`);
+    return room;
   }
 }
