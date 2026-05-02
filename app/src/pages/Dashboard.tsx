@@ -8,6 +8,7 @@ import {
   dashboardElements,
 } from '../styles/theme';
 import HousesTab from '../components/tabs/HousesTab';
+import RoomsTab from '../components/tabs/RoomsTab';
 
 type Tab = 'houses' | 'rooms' | 'leases';
 const TABS: Tab[] = ['houses', 'rooms', 'leases'];
@@ -74,6 +75,7 @@ export default function DashboardPage() {
 
         <main style={dashboardStyles.dashboard}>
           {tab === 'houses' && <HousesTab />}
+          {tab === 'rooms' && <RoomsTab />}
         </main>
       </div>
     </div>
