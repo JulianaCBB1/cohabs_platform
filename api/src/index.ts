@@ -5,12 +5,13 @@ import { initializeServices } from './services/instances';
 import { globalErrorHandler } from './middleware/errorHandler';
 import authRouter from './routes/auth';
 import housesRouter from './routes/houses';
+import roomRouter from './routes/rooms';
 
 const app = express();
 const port = 3001;
 
 app.use(express.json());
-app.use(cors({ origin: 'http://localhost:5173' }));
+app.use(cors());
 
 app.get('/health', (_req, res) => {
   console.log('received request');
@@ -25,6 +26,8 @@ AppDataSource.initialize()
 
     app.use('/auth', authRouter);
     app.use('/houses', housesRouter);
+    app.use('/houses/:houseId/rooms', roomRouter);
+
     app.use(globalErrorHandler);
 
     app.listen(port, () => {

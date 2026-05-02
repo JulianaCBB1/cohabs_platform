@@ -12,6 +12,7 @@ export class HouseService {
     const skip = (page - 1) * limit;
 
     const [data, total] = await this.houseRepo.findAndCount({
+      relations: { rooms: true },
       order: { createdAt: 'DESC' },
       skip,
       take: limit,
@@ -20,8 +21,18 @@ export class HouseService {
     return { data, total };
   }
 
+  async getAllUnpaginated() {
+    return this.houseRepo.find({
+      relations: { rooms: true },
+      order: { createdAt: 'DESC' },
+    });
+  }
+
   async getById(id: string): Promise<House> {
-    const house = await this.houseRepo.findOne({ where: { id } });
+    const house = await this.houseRepo.findOne({
+      relations: { rooms: true },
+      where: { id },
+    });
     if (!house) throw new NotFoundError('House not found');
     return house;
   }

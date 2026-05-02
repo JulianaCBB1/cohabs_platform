@@ -1,11 +1,14 @@
 import { AppDataSource } from '../data-source';
 import { House } from '../entities/House';
+import { Room } from '../entities/Room';
 import { User } from '../entities/User';
 import { HouseService } from './houseService';
+import { RoomService } from './roomService';
 import { UserService } from './userService';
 
 export let userService: UserService;
 export let houseService: HouseService;
+export let roomService: RoomService;
 
 export const initializeServices = () => {
   const userRepo = AppDataSource.getRepository(User);
@@ -13,4 +16,7 @@ export const initializeServices = () => {
 
   const houseRepo = AppDataSource.getRepository(House);
   houseService = new HouseService(houseRepo);
+
+  const roomRepo = AppDataSource.getRepository(Room);
+  roomService = new RoomService(roomRepo);
 };
