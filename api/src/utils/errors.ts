@@ -11,7 +11,7 @@ export class AppError extends Error {
   }
 }
 
-// 409 Conflict - Used for "Email already exists" or "Username taken"
+// 409 Conflict - Used for "Email already exists" or "address taken"
 export class ConflictError extends AppError {
   constructor(message: string) {
     super(message, 409);
@@ -32,14 +32,14 @@ export class ForbiddenError extends AppError {
   }
 }
 
-// 404 Not Found - Used for "User not found" or "Product not found"
-export class ResourceNotFoundError extends AppError {
+// 404 Not Found - Used for "User not found" or "House not found"
+export class NotFoundError extends AppError {
   constructor(resource: string = 'Resource') {
     super(`${resource} not found`, 404);
   }
 }
 
-// 422 Unprocessable Entity - Used for validation errors (if not using Zod)
+// 422 Unprocessable Entity - Used for validation errors
 export class ValidationError extends AppError {
   constructor(message: string) {
     super(message, 422);
